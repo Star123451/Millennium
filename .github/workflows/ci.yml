@@ -15,6 +15,10 @@ concurrency:
 jobs:
   prepare:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     outputs:
       version: ${{ steps.get_version.outputs.version }}
 
@@ -318,6 +322,10 @@ jobs:
   release:
     needs: [prepare, build-windows, build-linux]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     if: ${{ inputs.release_artifacts == 'yes' }}
     steps:
       - name: Checkout repository
