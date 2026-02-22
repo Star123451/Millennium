@@ -51,7 +51,7 @@ verify_platform() {
 
 check_dependencies() {
     log "resolving dependencies..."
-    for cmd in curl tar jq sudo; do
+    for cmd in curl tar jq; do
         command -v "${cmd}" >/dev/null || {
             log "${cmd} isn't installed. Install it from your package manager." >&2
             exit 1
@@ -119,16 +119,19 @@ extract_package() {
 
 install_millennium() {
     local extract_path="$1"
+    local install_dest="${XDG_DATA_HOME:-${HOME}/.local/share}/millennium"
 
     if [ "${DRY_RUN}" -eq 0 ]; then
-        sudo cp -r "${extract_path}"/* / || true
+        mkdir -p "${install_dest}"
+        cp -r "${extract_path}"/* "${install_dest}/" || true
     else
-        log "[DRY RUN] Would copy files from ${extract_path} to /"
+        log "[DRY RUN] Would copy files from ${extract_path} to ${install_dest}/"
     fi
 }
 
 post_install() {
-    sudo chmod +x /opt/python-i686-3.11.8/bin/python3.11
+    local install_dest="${XDG_DATA_HOME:-${HOME}/.local/share}/millennium"
+    chmod +x "${install_dest}/python/bin/python3.11"
 
     log "installing for '${USER}'"
 
@@ -145,7 +148,7 @@ post_install() {
     fi
 
     # create a symlink for millenniums preload bootstrap.
-    [ -d "${HOME}/.steam/steam/ubuntu12_32" ] && ln -sf /usr/lib/millennium/libmillennium_bootstrap_86x.so "${target}"
+    [ -d "${HOME}/.steam/steam/ubuntu12_32" ] && ln -sf "${install_dest}/libmillennium_bootstrap_86x.so" "${target}"
 }
 
 cleanup() {

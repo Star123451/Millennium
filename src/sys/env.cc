@@ -159,7 +159,7 @@ void SetupEnvironmentVariables()
 #ifdef _WIN32
     const auto shimsPath = SystemIO::GetInstallPath().string() + "/ext/data/shims";
 #elif __linux__
-    const auto shimsPath = "/usr/share/millennium/shims";
+    const auto shimsPath = GetEnvWithFallback("XDG_DATA_HOME", fmt::format("{}/.local/share", GetEnv("HOME"))) + "/millennium/shims";
 #elif __APPLE__
     const auto shimsPath = "/usr/local/share/millennium/shims";
 #endif
@@ -171,7 +171,7 @@ void SetupEnvironmentVariables()
 #ifdef _WIN32
     const auto assetsPath = SystemIO::GetInstallPath().string() + "/ext/data/assets";
 #elif __linux__
-    const auto assetsPath = "/usr/share/millennium/assets";
+    const auto assetsPath = GetEnvWithFallback("XDG_DATA_HOME", fmt::format("{}/.local/share", GetEnv("HOME"))) + "/millennium/assets";
 #elif __APPLE__
     const auto assetsPath = "/usr/local/share/millennium/assets";
 #endif
@@ -216,9 +216,9 @@ void SetupEnvironmentVariables()
 
     std::map<std::string, std::string> environment_unix = {
         { "OPENSSL_CONF", "/dev/null" },
-        { "MILLENNIUM_RUNTIME_PATH", customLdPreload != "" ? customLdPreload : "/usr/lib/millennium/libmillennium_x86.so"},
+        { "MILLENNIUM_RUNTIME_PATH", customLdPreload != "" ? customLdPreload : fmt::format("{}/millennium/libmillennium_x86.so", dataDir) },
 
-        { "LIBPYTHON_RUNTIME_PATH", LIBPYTHON_RUNTIME_PATH },
+        { "LIBPYTHON_RUNTIME_PATH", fmt::format("{}/millennium/python/lib/libpython-3.11.8.so", dataDir) },
 
         { "MILLENNIUM__STEAM_EXE_PATH", fmt::format("{}/.steam/steam/ubuntu12_32/steam", homeDir) },
         { "MILLENNIUM__PLUGINS_PATH", fmt::format("{}/millennium/plugins", dataDir) },

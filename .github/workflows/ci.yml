@@ -258,15 +258,14 @@ jobs:
           npm install -g pnpm
 
           wget https://github.com/shdwmtr/pybuilder/releases/download/v1.0.6/python-3.11.8-32-bit.tar.gz -O python-3.11.8-32-bit.tar.gz
-          mkdir -p ~/build/opt/python-i686-3.11.8
-          mkdir -p ~/build/usr/lib/millennium
+          mkdir -p ~/build/python
           mkdir -p /opt/python-i686-3.11.8/lib
 
-          tar -xzf python-3.11.8-32-bit.tar.gz -C ~/build/opt/python-i686-3.11.8
-          mv ~/build/opt/python-i686-3.11.8/python-build/* ~/build/opt/python-i686-3.11.8/
+          tar -xzf python-3.11.8-32-bit.tar.gz -C ~/build/python
+          mv ~/build/python/python-build/* ~/build/python/
 
-          cp ~/build/opt/python-i686-3.11.8/lib/libpython-3.11.8.so /opt/python-i686-3.11.8/lib/libpython-3.11.8.so
-          ~/build/opt/python-i686-3.11.8/bin/python3.11 --version
+          cp ~/build/python/lib/libpython-3.11.8.so /opt/python-i686-3.11.8/lib/libpython-3.11.8.so
+          ~/build/python/bin/python3.11 --version
 
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v2
@@ -299,18 +298,15 @@ jobs:
           cmake --build build --config Release -- -j$(nproc)
 
           # Create final directory structure
-          mkdir -p ~/build/usr/lib/millennium
-          mkdir -p ~/build/usr/bin
-          mkdir -p ~/build/usr/share/millennium
-          mkdir -p ~/build/opt
+          # python is already in ~/build/python
 
           # Copy binaries and libraries directly to final locations
-          cp build/src/libmillennium_x86.so ~/build/usr/lib/millennium/libmillennium_x86.so
-          cp build/src/boot/linux/libmillennium_bootstrap_86x.so ~/build/usr/lib/millennium/libmillennium_bootstrap_86x.so
-          cp build/src/hhx64/libmillennium_hhx64.so ~/build/usr/lib/millennium/libmillennium_hhx64.so
+          cp build/src/libmillennium_x86.so ~/build/libmillennium_x86.so
+          cp build/src/boot/linux/libmillennium_bootstrap_86x.so ~/build/libmillennium_bootstrap_86x.so
+          cp build/src/hhx64/libmillennium_hhx64.so ~/build/libmillennium_hhx64.so
 
-          mkdir -p ~/build/usr/share/millennium/assets
-          mv src/pipx ~/build/usr/share/millennium/assets/pipx
+          mkdir -p ~/build/assets
+          mv src/pipx ~/build/assets/pipx
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
