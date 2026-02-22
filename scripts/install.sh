@@ -30,7 +30,7 @@
 
 # https://github.com/SteamClientHomebrew/Millennium/blob/main/scripts/install.sh
 
-readonly GITHUB_ACCOUNT="SteamClientHomebrew/Millennium"
+readonly GITHUB_ACCOUNT="Star123451/Millennium"
 readonly RELEASES_URI="https://api.github.com/repos/${GITHUB_ACCOUNT}/releases"
 readonly DOWNLOAD_URI="https://github.com/${GITHUB_ACCOUNT}/releases/download"
 readonly INSTALL_DIR="/tmp/millennium"
